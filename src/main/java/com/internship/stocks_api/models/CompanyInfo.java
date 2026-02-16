@@ -20,7 +20,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "companies")
 public class CompanyInfo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
