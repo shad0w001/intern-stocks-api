@@ -1,8 +1,10 @@
 package com.internship.stocks_api.services;
 
 import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
+import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
 import com.internship.stocks_api.mappers.CompanyInfoMapper;
+import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,28 @@ public class CompanyInfoService {
     }
 
     public CompanyInfoViewDto createCompanyInfoEntry(CompanyInfoCreateDto dto){
-        return null;
+        var alreadyExistingInfo = companyInfoRepository.findBySymbol(dto.getSymbol())
+                .orElse(null);
+
+        if(alreadyExistingInfo != null){
+            return null;
+        }
+
+        CompanyInfo entry = companyInfoMapper.createDtoToEntity(dto);
+        var saved = companyInfoRepository.save(entry);
+        return companyInfoMapper.toViewDto(saved);
+    }
+
+    public CompanyInfoViewDto updateCompanyInfoEntry(CompanyInfoUpdateDto dto){
+        var alreadyExistingInfo = companyInfoRepository.findBySymbol(dto.getSymbol())
+                .orElse(null);
+
+        if(alreadyExistingInfo == null){
+            return null;
+        }
+
+        CompanyInfo entry = companyInfoMapper.updateDtoToEntity(dto);
+        var saved = companyInfoRepository.save(entry);
+        return companyInfoMapper.toViewDto(saved);
     }
 }
