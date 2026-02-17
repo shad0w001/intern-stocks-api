@@ -32,6 +32,20 @@ public class CompanyInfoController {
         return ResponseEntity.ok(result.getValue());
     }
 
+    @GetMapping("company-stocks/{id}")
+    public ResponseEntity<?> getCompanyStockInfo(@PathVariable Long id){
+
+        var result = service.getCompanyStockInfo(id);
+
+        if (result.isFailure()) {
+            return ResponseEntity
+                    .status(result.getError().status())
+                    .body(result.getError().message());
+        }
+
+        return ResponseEntity.ok(result.getValue());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCompanyInfoEntry(@PathVariable Long id){
 
