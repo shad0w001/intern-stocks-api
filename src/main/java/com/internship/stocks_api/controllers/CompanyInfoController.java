@@ -1,6 +1,7 @@
 package com.internship.stocks_api.controllers;
 
 import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
+import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
 import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.services.CompanyInfoService;
@@ -31,10 +32,24 @@ public class CompanyInfoController {
     @PostMapping
     public ResponseEntity<?> createCompanyEntry(@Valid @RequestBody CompanyInfoCreateDto dto){
         var companyInfo = service.createCompanyInfoEntry(dto);
+
         if(companyInfo == null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("A company with this symbol already exists");
         }
         return ResponseEntity.ok(companyInfo);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCompany(@PathVariable Long id, @Valid @RequestBody CompanyInfoUpdateDto dto) {
+
+        var updated = service.updateCompanyInfoEntry(id, dto);
+
+        if (updated == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Company with id " + id + " does not exist.");
+        }
+
+        return ResponseEntity.ok(updated);
     }
 
 }

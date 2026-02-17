@@ -37,19 +37,19 @@ public class CompanyInfoService {
 
         CompanyInfo entry = companyInfoMapper.createDtoToEntity(dto);
         var saved = companyInfoRepository.save(entry);
+
         return companyInfoMapper.toViewDto(saved);
     }
 
-    public CompanyInfoViewDto updateCompanyInfoEntry(CompanyInfoUpdateDto dto){
-        var alreadyExistingInfo = companyInfoRepository.findBySymbol(dto.getSymbol())
-                .orElse(null);
-
-        if(alreadyExistingInfo == null){
+    public CompanyInfoViewDto updateCompanyInfoEntry(Long id, CompanyInfoUpdateDto dto){
+        var existing = companyInfoRepository.findById(id).orElse(null);
+        if (existing == null) {
             return null;
         }
 
-        CompanyInfo entry = companyInfoMapper.updateDtoToEntity(dto);
-        var saved = companyInfoRepository.save(entry);
+        companyInfoMapper.updateDtoToEntity(dto, existing);
+
+        var saved = companyInfoRepository.save(existing);
         return companyInfoMapper.toViewDto(saved);
     }
 }
