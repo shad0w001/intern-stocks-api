@@ -6,10 +6,12 @@ import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
 import com.internship.stocks_api.dtos.company_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
+import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.mappers.CompanyInfoMapper;
 import com.internship.stocks_api.models.CompanyInfo;
-import com.internship.stocks_api.models.FinnhubCompanyProfileResponse;
+import com.internship.stocks_api.models.CompanyStockInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
+import com.internship.stocks_api.repositories.CompanyStockInfoRepository;
 import com.internship.stocks_api.shared.ApiError;
 import com.internship.stocks_api.shared.Result;
 import jakarta.transaction.Transactional;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,6 +28,7 @@ import java.util.List;
 public class CompanyInfoService {
 
     private final CompanyInfoRepository companyInfoRepository;
+    private final CompanyStockInfoRepository companyStockInfoRepository;
     private final CompanyInfoMapper companyInfoMapper;
     private final FinnhubClient finnhubClient;
 
@@ -53,14 +57,22 @@ public class CompanyInfoService {
             return Result.failure(CompanyInfoErrors.notFound(id));
         }
 
-        FinnhubCompanyProfileResponse apiResponse;
-        try {
-            apiResponse = finnhubClient.getCompanyProfile(company.getSymbol());
-        } catch (RestClientException ex) {
-            return Result.failure(ApiError.problem(
-                    "ExternalApi.Failure",
-                    "Failed to fetch Finnhub profile for symbol '" + company.getSymbol() + "'"
-            ));
+        CompanyStockInfo response;
+
+        var stockInfo = companyStockInfoRepository.findBySymbolAndDate(company.getSymbol(), LocalDate.now());
+        if(stockInfo.isPresent()){
+            response = stockInfo.get();
+        }
+        else{
+            try {
+                response = finnhubClient.getCompanyProfile(company.getSymbol());
+                response.setSymbol(company.getSymbol());
+                response.setDate(LocalDate.now());
+                companyStockInfoRepository.save(response);
+            } catch (RestClientException ex) {
+                return Result.failure(FinnhubApiErrors.notFound(company.getSymbol()));
+
+            }
         }
 
         CompanyStockInfoViewDto dto = new CompanyStockInfoViewDto(
@@ -71,8 +83,8 @@ public class CompanyInfoService {
                 company.getWebsite(),
                 company.getEmail(),
                 company.getCreatedAt(),
-                apiResponse.getMarketCapitalization(),
-                apiResponse.getShareOutstanding()
+                response.getMarketCapitalization(),
+                response.getShareOutstanding()
         );
 
         return Result.success(dto);

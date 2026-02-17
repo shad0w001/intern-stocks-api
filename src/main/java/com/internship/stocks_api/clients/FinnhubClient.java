@@ -1,6 +1,6 @@
 package com.internship.stocks_api.clients;
 
-import com.internship.stocks_api.models.FinnhubCompanyProfileResponse;
+import com.internship.stocks_api.models.CompanyStockInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -22,11 +22,11 @@ public class FinnhubClient {
         this.apiKey = apiKey;
     }
 
-    public FinnhubCompanyProfileResponse getCompanyProfile(String symbol) {
+    public CompanyStockInfo getCompanyProfile(String symbol) {
         String url = baseUrl + "/stock/profile2?symbol={symbol}&token={token}";
 
         try {
-            return restTemplate.getForObject(url, FinnhubCompanyProfileResponse.class, symbol, apiKey);
+            return restTemplate.getForObject(url, CompanyStockInfo.class, symbol, apiKey);
         } catch (RestClientException ex) {
             throw new RestClientException("Failed to fetch Finnhub profile for symbol " + symbol, ex);
         }
