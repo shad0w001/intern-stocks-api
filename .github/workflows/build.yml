@@ -1,5 +1,9 @@
 name: Build
 
+permissions:
+  contents: read
+  pull-requests: read
+
 on:
   push:
     branches:
@@ -48,3 +52,8 @@ jobs:
 
       - name: Build application
         run: ./gradlew build
+
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar
