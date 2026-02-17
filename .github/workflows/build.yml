@@ -51,7 +51,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build application
-        run: ./gradlew build
+        run: ./gradlew build --configuration-cache
 
       - name: SonarCloud Scan
         env:
