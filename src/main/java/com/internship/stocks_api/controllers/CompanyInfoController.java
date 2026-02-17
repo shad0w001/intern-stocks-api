@@ -5,11 +5,14 @@ import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
 import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.services.CompanyInfoService;
+import com.internship.stocks_api.shared.ApiError;
+import com.internship.stocks_api.shared.Result;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -24,32 +27,68 @@ public class CompanyInfoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CompanyInfoViewDto>> getAllCompanyInfoEntries(){
+    public ResponseEntity<?> getAllCompanyInfoEntries(){
         var result = service.getAllCompanyInfoEntries();
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result.getValue());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCompanyInfoEntry(@PathVariable Long id){
+
+        var result = service.getCompanyInfoEntry(id);
+
+        if (result.isFailure()) {
+            return ResponseEntity
+                    .status(result.getError().status())
+                    .body(result.getError().message());
+        }
+
+        return ResponseEntity.ok(result.getValue());
     }
 
     @PostMapping
-    public ResponseEntity<?> createCompanyEntry(@Valid @RequestBody CompanyInfoCreateDto dto){
-        var companyInfo = service.createCompanyInfoEntry(dto);
+    public ResponseEntity<?> createCompanyEntry
+            (@Valid @RequestBody CompanyInfoCreateDto dto,
+             BindingResult bindingResult,
+             UriComponentsBuilder uriBuilder){
 
-        if(companyInfo == null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("A company with this symbol already exists");
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        return ResponseEntity.ok(companyInfo);
+
+        Result<CompanyInfoViewDto> result = service.createCompanyInfoEntry(dto);
+
+        if (result.isFailure()) {
+            return ResponseEntity
+                    .status(result.getError().status())
+                    .body(result.getError().message());
+        }
+
+        var company = result.getValue();
+        var uri = uriBuilder.path("/companies/{id}").buildAndExpand(company.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(company);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCompany(@PathVariable Long id, @Valid @RequestBody CompanyInfoUpdateDto dto) {
+    public ResponseEntity<?> updateCompany
+            (@PathVariable Long id,
+             BindingResult bindingResult,
+             @Valid @RequestBody CompanyInfoUpdateDto dto) {
 
-        var updated = service.updateCompanyInfoEntry(id, dto);
-
-        if (updated == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Company with id " + id + " does not exist.");
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        return ResponseEntity.ok(updated);
+        Result<CompanyInfoViewDto> result = service.updateCompanyInfoEntry(id, dto);
+
+        if (result.isFailure()) {
+            return ResponseEntity
+                    .status(result.getError().status())
+                    .body(result.getError().message());
+        }
+
+        return ResponseEntity.noContent().build();
     }
 
 }

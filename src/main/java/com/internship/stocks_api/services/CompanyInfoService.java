@@ -3,9 +3,11 @@ package com.internship.stocks_api.services;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
+import com.internship.stocks_api.errors.CompanyInfoErrors;
 import com.internship.stocks_api.mappers.CompanyInfoMapper;
 import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
+import com.internship.stocks_api.shared.Result;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,36 +22,50 @@ public class CompanyInfoService {
     private final CompanyInfoRepository companyInfoRepository;
     private final CompanyInfoMapper companyInfoMapper;
 
-    public List<CompanyInfoViewDto> getAllCompanyInfoEntries(){
-        return companyInfoRepository.findAll()
+    public Result<List<CompanyInfoViewDto>> getAllCompanyInfoEntries(){
+        var list = companyInfoRepository.findAll()
                 .stream()
                 .map(companyInfoMapper::toViewDto)
                 .toList();
+
+        return Result.success(list);
     }
 
-    public CompanyInfoViewDto createCompanyInfoEntry(CompanyInfoCreateDto dto){
-        var alreadyExistingInfo = companyInfoRepository.findBySymbol(dto.getSymbol())
-                .orElse(null);
+    public Result<CompanyInfoViewDto> getCompanyInfoEntry(Long id){
+        var companyInfo = companyInfoRepository.findById(id).orElse(null);
 
-        if(alreadyExistingInfo != null){
-            return null;
+        if (companyInfo == null) {
+            return Result.failure(CompanyInfoErrors.notFound(id));
         }
 
-        CompanyInfo entry = companyInfoMapper.createDtoToEntity(dto);
-        var saved = companyInfoRepository.save(entry);
-
-        return companyInfoMapper.toViewDto(saved);
+        return Result.success(companyInfoMapper.toViewDto(companyInfo));
     }
 
-    public CompanyInfoViewDto updateCompanyInfoEntry(Long id, CompanyInfoUpdateDto dto){
+    public Result<CompanyInfoViewDto> createCompanyInfoEntry(CompanyInfoCreateDto dto) {
+
+        if (companyInfoRepository.findBySymbol(dto.getSymbol()).isPresent()) {
+            return Result.failure(
+                    CompanyInfoErrors.symbolAlreadyExists(dto.getSymbol())
+            );
+        }
+
+        CompanyInfo entity = companyInfoMapper.createDtoToEntity(dto);
+        var saved = companyInfoRepository.save(entity);
+
+        return Result.success(companyInfoMapper.toViewDto(saved));
+    }
+
+    public Result<CompanyInfoViewDto> updateCompanyInfoEntry(Long id, CompanyInfoUpdateDto dto) {
+
         var existing = companyInfoRepository.findById(id).orElse(null);
+
         if (existing == null) {
-            return null;
+            return Result.failure(CompanyInfoErrors.notFound(id));
         }
 
         companyInfoMapper.updateDtoToEntity(dto, existing);
-
         var saved = companyInfoRepository.save(existing);
-        return companyInfoMapper.toViewDto(saved);
+
+        return Result.success(companyInfoMapper.toViewDto(saved));
     }
 }
