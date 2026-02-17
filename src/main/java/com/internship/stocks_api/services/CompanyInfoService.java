@@ -71,7 +71,6 @@ public class CompanyInfoService {
                 companyStockInfoRepository.save(response);
             } catch (RestClientException ex) {
                 return Result.failure(FinnhubApiErrors.notFound(company.getSymbol()));
-
             }
         }
 
