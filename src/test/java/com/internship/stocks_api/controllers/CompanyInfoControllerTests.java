@@ -69,7 +69,7 @@ class CompanyInfoControllerTests {
                 "SOME",
                 "https://example.com",
                 "a@example.com",
-                LocalDateTime.now(),
+                null,
                 1_000_000_000D,
                 1_000_000D
         );
