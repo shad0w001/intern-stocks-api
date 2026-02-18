@@ -87,8 +87,8 @@ public class CompanyInfoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCompany
             (@PathVariable Long id,
-             BindingResult bindingResult,
-             @Valid @RequestBody CompanyInfoUpdateDto dto) {
+             @Valid @RequestBody CompanyInfoUpdateDto dto,
+             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
