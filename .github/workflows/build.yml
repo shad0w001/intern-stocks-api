@@ -55,6 +55,9 @@ jobs:
       - name: Build application
         run: ./gradlew build --configuration-cache
 
+      - name: Build & Test with Coverage
+        run: ./gradlew clean test jacocoTestReport
+
       - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
