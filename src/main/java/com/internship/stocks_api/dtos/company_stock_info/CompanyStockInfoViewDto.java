@@ -1,4 +1,4 @@
-package com.internship.stocks_api.dtos.company_info;
+package com.internship.stocks_api.dtos.company_stock_info;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

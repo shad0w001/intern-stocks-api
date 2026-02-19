@@ -55,7 +55,7 @@ jobs:
       - name: Build application
         run: ./gradlew build --configuration-cache
 
-      - name: Build & Test with Coverage
+      - name: Run Tests & Generate Code Coverage /w JaCoCo
         run: ./gradlew clean test jacocoTestReport
 
       - name: SonarCloud Scan

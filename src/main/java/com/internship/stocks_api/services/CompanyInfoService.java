@@ -4,7 +4,7 @@ import com.internship.stocks_api.clients.FinnhubClient;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
-import com.internship.stocks_api.dtos.company_info.CompanyStockInfoViewDto;
+import com.internship.stocks_api.dtos.company_stock_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.mappers.CompanyInfoMapper;
@@ -12,7 +12,6 @@ import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.models.CompanyStockInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
 import com.internship.stocks_api.repositories.CompanyStockInfoRepository;
-import com.internship.stocks_api.shared.ApiError;
 import com.internship.stocks_api.shared.Result;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -49,44 +48,6 @@ public class CompanyInfoService {
         }
 
         return Result.success(companyInfoMapper.toViewDto(companyInfo));
-    }
-
-    public Result<CompanyStockInfoViewDto> getCompanyStockInfo(Long id) {
-        var company = companyInfoRepository.findById(id).orElse(null);
-        if (company == null) {
-            return Result.failure(CompanyInfoErrors.notFound(id));
-        }
-
-        CompanyStockInfo response;
-
-        var stockInfo = companyStockInfoRepository.findBySymbolAndDate(company.getSymbol(), LocalDate.now());
-        if(stockInfo.isPresent()){
-            response = stockInfo.get();
-        }
-        else{
-            try {
-                response = finnhubClient.getCompanyProfile(company.getSymbol());
-                response.setSymbol(company.getSymbol());
-                response.setDate(LocalDate.now());
-                companyStockInfoRepository.save(response);
-            } catch (RestClientException ex) {
-                return Result.failure(FinnhubApiErrors.notFound(company.getSymbol()));
-            }
-        }
-
-        CompanyStockInfoViewDto dto = new CompanyStockInfoViewDto(
-                company.getId(),
-                company.getName(),
-                company.getCountry(),
-                company.getSymbol(),
-                company.getWebsite(),
-                company.getEmail(),
-                company.getCreatedAt(),
-                response.getMarketCapitalization(),
-                response.getShareOutstanding()
-        );
-
-        return Result.success(dto);
     }
 
     public Result<CompanyInfoViewDto> createCompanyInfoEntry(CompanyInfoCreateDto dto) {

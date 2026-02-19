@@ -4,28 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
-import com.internship.stocks_api.dtos.company_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
-import com.internship.stocks_api.errors.FinnhubApiErrors;
-import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.services.CompanyInfoService;
-import com.internship.stocks_api.shared.ApiError;
 import com.internship.stocks_api.shared.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.web.SpringBootMockServletContext;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -57,67 +47,6 @@ class CompanyInfoControllerTests {
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
-    }
-
-    @Test
-    void getCompanyStockInfo_Should_ReturnOk_WhenCompanyExists() throws Exception {
-        // arrange
-        var stockDto = new CompanyStockInfoViewDto(
-                1L,
-                "Some Company",
-                "US",
-                "SOME",
-                "https://example.com",
-                "a@example.com",
-                null,
-                1_000_000_000D,
-                1_000_000D
-        );
-
-        when(service.getCompanyStockInfo(1L))
-                .thenReturn(Result.success(stockDto));
-
-        String expectedJson = objectMapper.writeValueAsString(stockDto);
-
-        // act + assert
-        mockMvc.perform(get("/companies/company-stocks/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
-    }
-
-    @Test
-    void getCompanyStockInfo_Should_ReturnNotFound_WhenCompanyDoesNotExist() throws Exception {
-        // arrange
-        var id = 999L;
-        when(service.getCompanyStockInfo(id))
-                .thenReturn(Result.failure(CompanyInfoErrors.notFound(id)));
-
-        // act + assert
-        mockMvc.perform(get("/companies/company-stocks/999"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Company with id = '" + id + "' was not found"));
-    }
-
-    @Test
-    void getCompanyStockInfo_Should_ReturnNotFound_WhenFinnhubDoesNotFindSymbol() throws Exception {
-        // arrange
-        var companyInfo = new CompanyInfo(
-                1L,
-                "Some Company",
-                "US",
-                "SOME",
-                "https://example.com",
-                "a@example.com",
-                LocalDateTime.now()
-        );
-
-        when(service.getCompanyStockInfo(companyInfo.getId()))
-                .thenReturn(Result.failure(FinnhubApiErrors.notFound(companyInfo.getSymbol())));
-
-        // act + assert
-        mockMvc.perform(get("/companies/company-stocks/1"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Company with the symbol = '" + companyInfo.getSymbol() + "' was not found"));
     }
 
     @Test
