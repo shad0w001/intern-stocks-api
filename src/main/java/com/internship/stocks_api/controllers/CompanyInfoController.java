@@ -24,13 +24,13 @@ public class CompanyInfoController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCompanyInfoEntries(){
+    public ResponseEntity<Object> getAllCompanyInfoEntries(){
         var result = service.getAllCompanyInfoEntries();
         return ResponseEntity.ok(result.getValue());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCompanyInfoEntry(@PathVariable Long id){
+    public ResponseEntity<Object> getCompanyInfoEntry(@PathVariable Long id){
 
         var result = service.getCompanyInfoEntry(id);
 
@@ -44,7 +44,7 @@ public class CompanyInfoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCompanyEntry
+    public ResponseEntity<Object> createCompanyEntry
             (@Valid @RequestBody CompanyInfoCreateDto dto,
              BindingResult bindingResult,
              UriComponentsBuilder uriBuilder){
@@ -68,7 +68,7 @@ public class CompanyInfoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCompany
+    public ResponseEntity<Object> updateCompany
             (@PathVariable Long id,
              @Valid @RequestBody CompanyInfoUpdateDto dto,
              BindingResult bindingResult) {

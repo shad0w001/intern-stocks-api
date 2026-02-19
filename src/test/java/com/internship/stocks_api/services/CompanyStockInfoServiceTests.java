@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.never;
 
-public class CompanyStockInfoServiceTests {
+class CompanyStockInfoServiceTests {
 
     @Mock
     private CompanyInfoRepository companyInfoRepository;
