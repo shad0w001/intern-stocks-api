@@ -1,6 +1,6 @@
 package com.internship.stocks_api.services;
 
-import com.internship.stocks_api.clients.FinnhubClient;
+import com.internship.stocks_api.clients.finnhub.FinnhubClient;
 import com.internship.stocks_api.dtos.company_stock_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.models.CompanyInfo;
