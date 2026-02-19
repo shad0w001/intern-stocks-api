@@ -1,6 +1,5 @@
 package com.internship.stocks_api.repositories;
 
-import com.internship.stocks_api.models.CompanyInfo;
 import com.internship.stocks_api.models.CompanyStockInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 

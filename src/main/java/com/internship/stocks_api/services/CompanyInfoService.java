@@ -4,21 +4,15 @@ import com.internship.stocks_api.clients.FinnhubClient;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
-import com.internship.stocks_api.dtos.company_stock_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
-import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.mappers.CompanyInfoMapper;
 import com.internship.stocks_api.models.CompanyInfo;
-import com.internship.stocks_api.models.CompanyStockInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
 import com.internship.stocks_api.repositories.CompanyStockInfoRepository;
 import com.internship.stocks_api.shared.Result;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

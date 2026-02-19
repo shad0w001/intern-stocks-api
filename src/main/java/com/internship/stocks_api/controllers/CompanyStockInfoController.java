@@ -1,6 +1,5 @@
 package com.internship.stocks_api.controllers;
 
-import com.internship.stocks_api.services.CompanyInfoService;
 import com.internship.stocks_api.services.CompanyStockInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
