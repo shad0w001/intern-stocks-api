@@ -5,7 +5,6 @@ import com.internship.stocks_api.dtos.company_stock_info.CompanyStockInfoViewDto
 import com.internship.stocks_api.errors.CompanyInfoErrors;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.models.CompanyInfo;
-import com.internship.stocks_api.services.CompanyInfoService;
 import com.internship.stocks_api.services.CompanyStockInfoService;
 import com.internship.stocks_api.shared.Result;
 import org.junit.jupiter.api.Test;
