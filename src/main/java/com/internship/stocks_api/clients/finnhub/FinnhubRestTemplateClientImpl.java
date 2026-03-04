@@ -12,13 +12,13 @@ import org.springframework.web.client.RestTemplate;
         havingValue = "rest",
         matchIfMissing = true // default client in case application.properties breaks for whatever reason
 )
-public class FinnhubRestTemplateClient implements FinnhubClient {
+public class FinnhubRestTemplateClientImpl implements FinnhubClient {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final String baseUrl;
     private final String apiKey;
 
-    public FinnhubRestTemplateClient(
+    public FinnhubRestTemplateClientImpl(
             @Value("${finnhub.api.base-url}") String baseUrl,
             @Value("${finnhub.api.key}") String apiKey
     ) {

@@ -46,6 +46,8 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.7.0.Beta1'
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
 
+    implementation 'org.liquibase:liquibase-core'
+
     implementation("me.paulschwarz:spring-dotenv:5.1.0")
     developmentOnly("me.paulschwarz:springboot4-dotenv:5.1.0")
 

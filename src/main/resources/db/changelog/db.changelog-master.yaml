@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: /src/main/resources/db/changelog/001-add-company_peers_table.yaml
