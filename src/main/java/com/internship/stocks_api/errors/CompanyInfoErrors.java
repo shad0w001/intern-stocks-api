@@ -13,6 +13,13 @@ public final class CompanyInfoErrors {
         );
     }
 
+    public static ApiError symbolNotFound(String symbol) {
+        return ApiError.notFound(
+                "CompanyInfo.NotFound",
+                "Company with symbol = '" + symbol + "' was not found"
+        );
+    }
+
     public static ApiError symbolAlreadyExists(String symbol) {
         return ApiError.conflict(
                 "CompanyInfo.SymbolAlreadyExists",

@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CompanyPeersMapper {
 
-    @Mapping(target = "ticker", source = "company.symbol")
+    @Mapping(target = "symbol", source = "company.symbol")
     @Mapping(target = "peers", source = "peers")
     CompanyPeerViewDto toViewDto(CompanyInfo company, List<String> peers);
 }

@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyPeerViewDto {
-    private String ticker;
+    private String symbol;
     private List<String> peers;
 }
