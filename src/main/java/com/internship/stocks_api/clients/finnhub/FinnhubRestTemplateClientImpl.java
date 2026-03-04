@@ -3,8 +3,13 @@ package com.internship.stocks_api.clients.finnhub;
 import com.internship.stocks_api.models.CompanyStockInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Component
 @ConditionalOnProperty(
@@ -30,6 +35,20 @@ public class FinnhubRestTemplateClientImpl implements FinnhubClient {
     public CompanyStockInfo getCompanyProfile(String symbol) {
         String url = baseUrl + "/stock/profile2?symbol={symbol}&token={token}";
         return restTemplate.getForObject(url, CompanyStockInfo.class, symbol, apiKey);
+    }
+
+    @Override
+    public List<String> getCompanyPeers(String symbol) {
+        String url = baseUrl + "/stock/peers?symbol={symbol}&token={token}";
+        ResponseEntity<List<String>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {},
+                symbol,
+                apiKey
+        );
+        return response.getBody();
     }
 }
 

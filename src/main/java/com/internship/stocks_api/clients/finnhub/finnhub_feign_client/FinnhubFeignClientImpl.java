@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @ConditionalOnProperty(
         name = "finnhub.client.type",
@@ -23,5 +25,10 @@ public class FinnhubFeignClientImpl implements FinnhubClient {
     @Override
     public CompanyStockInfo getCompanyProfile(String symbol) {
         return api.getCompanyProfile(symbol, apiKey);
+    }
+
+    @Override
+    public List<String> getCompanyPeers(String symbol) {
+        return api.getCompanyPeers(symbol, apiKey);
     }
 }
