@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,4 +41,9 @@ public class CompanyInfo {
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "company",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private Set<CompanyPeer> peers = new HashSet<>();
 }
