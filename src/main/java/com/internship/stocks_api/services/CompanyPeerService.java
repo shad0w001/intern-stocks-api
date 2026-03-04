@@ -52,6 +52,7 @@ public class CompanyPeerService {
                     peerEntities.add(peer);
                 }
                 companyPeerRepository.saveAll(peerEntities);
+                peers = peersFromApi;
             }catch (Exception ex){
                 return Result.failure(FinnhubApiErrors.notFound(symbol));
             }
@@ -60,5 +61,4 @@ public class CompanyPeerService {
         CompanyPeerViewDto dto = companyPeersMapper.toViewDto(companyInfo, peers);
         return Result.success(dto);
     }
-
 }
