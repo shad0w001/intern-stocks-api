@@ -16,5 +16,5 @@ public interface FinnhubFeignClient {
     CompanyStockInfo getCompanyProfile(@RequestParam("symbol") String symbol, @RequestParam("token") String token);
 
     @GetMapping("/stock/peers")
-    List<String> getCompanyPeers( @RequestParam("symbol") String symbol, @RequestParam("token") String token);
+    List<String> getCompanyPeers(@RequestParam("symbol") String symbol, @RequestParam("token") String token);
 }
