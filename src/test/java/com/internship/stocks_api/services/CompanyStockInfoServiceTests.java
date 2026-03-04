@@ -4,6 +4,7 @@ import com.internship.stocks_api.clients.finnhub.FinnhubClient;
 import com.internship.stocks_api.dtos.company_stock_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.models.CompanyInfo;
+import com.internship.stocks_api.models.CompanyPeer;
 import com.internship.stocks_api.models.CompanyStockInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
 import com.internship.stocks_api.repositories.CompanyStockInfoRepository;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.springframework.web.client.RestClientException;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -110,6 +112,7 @@ class CompanyStockInfoServiceTests {
         company.setWebsite("https://example.com");
         company.setEmail("a@example.com");
         company.setCreatedAt(null);
+        company.setPeers(new HashSet<>());
 
         var stockInfoFromApi = new CompanyStockInfo();
         stockInfoFromApi.setSymbol("SOME");

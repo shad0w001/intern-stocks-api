@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -80,7 +81,8 @@ class CompanyStockInfoControllerTests {
                 "SOME",
                 "https://example.com",
                 "a@example.com",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                new HashSet<>()
         );
 
         when(service.getCompanyStockInfo(companyInfo.getId()))
