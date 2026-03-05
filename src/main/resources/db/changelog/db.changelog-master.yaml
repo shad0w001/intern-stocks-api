@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
-      file: /src/main/resources/db/changelog/001-add-company_peers_table.yaml
+      file: db/changelog/000-baseline.yaml
+  - include:
+      file: db/changelog/001-insert-baseline-data.yaml
+  - include:
+      file: db/changelog/002-add-company-peers-table.yaml

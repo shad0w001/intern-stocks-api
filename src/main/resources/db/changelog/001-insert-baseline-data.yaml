@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-1
+      author: 1243557
+      comment: Insert baseline data into companies table
+      changes:
+        - insert:
+            tableName: companies
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: country
+                  value: "US"
+              - column:
+                  name: created_at
+                  valueDate: "2026-02-16T20:52:33"
+              - column:
+                  name: email
+                  value: "ir@microsoft.com"
+              - column:
+                  name: name
+                  value: "Microsoft Corp."
+              - column:
+                  name: symbol
+                  value: "MSFT"
+              - column:
+                  name: website
+                  value: "https://www.microsoft.com"
+        - insert:
+            tableName: companies
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: country
+                  value: "US"
+              - column:
+                  name: created_at
+                  valueDate: "2026-02-16T21:13:56"
+              - column:
+                  name: email
+                  value: ""
+              - column:
+                  name: name
+                  value: "Apple Inc."
+              - column:
+                  name: symbol
+                  value: "AAPL"
+              - column:
+                  name: website
+                  value: ""

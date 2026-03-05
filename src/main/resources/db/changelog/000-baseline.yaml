@@ -1,0 +1,72 @@
+databaseChangeLog:
+- changeSet:
+    id: 000-1
+    author: 1243557
+    changes:
+    - createTable:
+        tableName: companies
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: companies_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: country
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: symbol
+            type: VARCHAR(255)
+        - column:
+            name: website
+            type: VARCHAR(255)
+- changeSet:
+    id: 000-2
+    author: 1243557
+    changes:
+    - createTable:
+        tableName: company_stock_info
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: company_stock_info_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: date
+            type: date
+        - column:
+            name: market_capitalization
+            type: FLOAT8
+        - column:
+            name: share_outstanding
+            type: FLOAT8
+        - column:
+            name: symbol
+            type: VARCHAR(255)
+            constraints:
+              nullable: false
+
