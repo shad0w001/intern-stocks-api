@@ -5,11 +5,18 @@ import com.internship.stocks_api.dtos.company_info.CompanyInfoCreateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoUpdateDto;
 import com.internship.stocks_api.dtos.company_info.CompanyInfoViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
+import com.internship.stocks_api.security.JwtAuthTokenFilter;
 import com.internship.stocks_api.services.CompanyInfoService;
 import com.internship.stocks_api.shared.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,7 +27,19 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CompanyInfoController.class)
+@WebMvcTest(
+        controllers = CompanyInfoController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = JwtAuthTokenFilter.class
+        )
+)
+@AutoConfigureMockMvc(addFilters = false)
+@TestPropertySource(properties = {
+        "finnhub.client.type=rest",
+        "finnhub.api.base-url=http://localhost",
+        "finnhub.api.key=dummy"
+})
 class CompanyInfoControllerTests {
 
     @Autowired

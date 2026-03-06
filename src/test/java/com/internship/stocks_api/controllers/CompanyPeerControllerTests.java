@@ -4,11 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.internship.stocks_api.dtos.company_peers.CompanyPeerViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
+import com.internship.stocks_api.security.JwtAuthTokenFilter;
+import com.internship.stocks_api.security.JwtTokenProvider;
 import com.internship.stocks_api.services.CompanyPeerService;
 import com.internship.stocks_api.shared.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +26,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CompanyPeerController.class)
+@WebMvcTest(
+        controllers = CompanyPeerController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = JwtAuthTokenFilter.class
+        )
+)
+@AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(properties = {
         "finnhub.client.type=rest",
         "finnhub.api.base-url=http://localhost",
