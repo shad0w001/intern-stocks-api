@@ -43,7 +43,10 @@ public class SecurityConfig {
                         sm -> sm.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/auth/**", "/").permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/",
+                                "/swagger-ui/index.html").permitAll()
                         .anyRequest().authenticated()
                 );
 
