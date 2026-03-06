@@ -5,3 +5,7 @@ databaseChangeLog:
       file: db/changelog/001-insert-baseline-data.yaml
   - include:
       file: db/changelog/002-add-company-peers-table.yaml
+  - include:
+      file: db/changelog/003-add-users-table.yaml
+  - include:
+      file: db/changelog/004-add-oauth-accounts-table.yaml
