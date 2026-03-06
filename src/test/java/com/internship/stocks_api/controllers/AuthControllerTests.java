@@ -14,11 +14,17 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.validation.BindingResult;
 
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -65,6 +71,16 @@ class AuthControllerTests {
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    void login_ShouldReturnBadRequest_WhenValidationFails() throws Exception {
+        var dto = new LoginRequestDto(); // empty email/password
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -122,5 +138,15 @@ class AuthControllerTests {
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(AuthErrors.alreadyExists(dto.getEmail()).message()));
+    }
+
+    @Test
+    void register_ShouldReturnBadRequest_WhenValidationFails() throws Exception {
+        var dto = new RegisterRequestDto(); // empty email/password
+
+        mockMvc.perform(post("/auth/register")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
     }
 }
