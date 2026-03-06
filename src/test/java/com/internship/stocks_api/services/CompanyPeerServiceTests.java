@@ -4,23 +4,18 @@ import com.internship.stocks_api.clients.finnhub.FinnhubClient;
 import com.internship.stocks_api.dtos.company_peers.CompanyPeerViewDto;
 import com.internship.stocks_api.errors.CompanyInfoErrors;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
-import com.internship.stocks_api.mappers.CompanyInfoMapper;
 import com.internship.stocks_api.mappers.CompanyPeersMapper;
 import com.internship.stocks_api.models.CompanyInfo;
-import com.internship.stocks_api.models.CompanyPeer;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
 import com.internship.stocks_api.repositories.CompanyPeerRepository;
-import com.internship.stocks_api.repositories.CompanyStockInfoRepository;
 import com.internship.stocks_api.shared.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

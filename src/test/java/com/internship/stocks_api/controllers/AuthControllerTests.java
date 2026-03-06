@@ -45,8 +45,6 @@ class AuthControllerTests {
     @MockitoBean
     private AuthService authService;
 
-    // ------------------- LOGIN -------------------
-
     @Test
     void login_ShouldReturnOk_WhenCredentialsAreValid() throws Exception {
         // arrange
@@ -87,8 +85,6 @@ class AuthControllerTests {
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(AuthErrors.notFound(dto.getEmail()).message()));
     }
-
-    // ------------------- REGISTER -------------------
 
     @Test
     void register_ShouldReturnOk_WhenUserIsNew() throws Exception {

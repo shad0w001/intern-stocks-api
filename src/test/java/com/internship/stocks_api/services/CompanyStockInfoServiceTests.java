@@ -4,7 +4,6 @@ import com.internship.stocks_api.clients.finnhub.FinnhubClient;
 import com.internship.stocks_api.dtos.company_stock_info.CompanyStockInfoViewDto;
 import com.internship.stocks_api.errors.FinnhubApiErrors;
 import com.internship.stocks_api.models.CompanyInfo;
-import com.internship.stocks_api.models.CompanyPeer;
 import com.internship.stocks_api.models.CompanyStockInfo;
 import com.internship.stocks_api.repositories.CompanyInfoRepository;
 import com.internship.stocks_api.repositories.CompanyStockInfoRepository;

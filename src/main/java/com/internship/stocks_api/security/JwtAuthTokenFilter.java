@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +18,10 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
-    public static final String BEARER_ = "Bearer ";
+    public static final String BEARER_HEADER = "Bearer ";
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
 
@@ -43,7 +45,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
             }
         }
         catch (Exception ex){
-            System.out.println("Cannot set user authentication" + ex.getMessage());
+            log.error("Cannot set user authentication", ex);
         }
 
         filterChain.doFilter(request, response);
@@ -51,8 +53,8 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
-        if (bearer != null && bearer.startsWith(BEARER_)) {
-            return bearer.substring(BEARER_.length());
+        if (bearer != null && bearer.startsWith(BEARER_HEADER)) {
+            return bearer.substring(BEARER_HEADER.length());
         }
         return null;
     }

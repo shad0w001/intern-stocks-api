@@ -1,10 +1,10 @@
 package com.internship.stocks_api.security;
 
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +14,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
@@ -56,7 +57,7 @@ public class JwtTokenProvider {
             return true;
         }
         catch (Exception ex){
-            System.out.println("Jwt validation error: " + ex.getMessage());
+            log.error("Jwt validation error: ", ex);
         }
         return false;
     }
