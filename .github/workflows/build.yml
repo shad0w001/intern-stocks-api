@@ -37,6 +37,9 @@ jobs:
       FINNHUB_API_BASE_URL: https://finnhub.io/api/v1
       FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
 
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRATION: 7200000
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
