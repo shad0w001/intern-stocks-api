@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         http
-                .csrf(AbstractHttpConfigurer::disable) //stateless so it's fine to disable csrf
+                .csrf(AbstractHttpConfigurer::disable) // Safe: API is stateless and uses JWT; CSRF not needed
                 .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(
                         ex -> ex.authenticationEntryPoint(entryPoint))
