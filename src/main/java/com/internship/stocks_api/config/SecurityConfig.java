@@ -2,6 +2,8 @@ package com.internship.stocks_api.config;
 
 import com.internship.stocks_api.security.JwtAuthEntryPoint;
 import com.internship.stocks_api.security.JwtAuthTokenFilter;
+import com.internship.stocks_api.services.oauth2.handlers.GoogleOAuth2SuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,7 @@ public class SecurityConfig {
 
     private final JwtAuthTokenFilter jwtFilter;
     private final JwtAuthEntryPoint entryPoint;
+    private final GoogleOAuth2SuccessHandler googleOAuth2SuccessHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
@@ -42,11 +45,19 @@ public class SecurityConfig {
                 .sessionManagement(
                         sm -> sm.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/auth/oauth2/google")
+                        .successHandler(googleOAuth2SuccessHandler)  // issue JWT here
+                        .failureHandler((request, response, exception) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                        })
+                )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
                                 "/auth/**",
                                 "/",
-                                "/swagger-ui/index.html").permitAll()
+                                "/swagger-ui/index.html",
+                                "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 );
 
