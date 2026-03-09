@@ -55,7 +55,6 @@ public class OAuthService {
                 oauthAccountRepository.save(oauthAccount);
             }
 
-            // 5️⃣ Issue JWT
             String jwt = jwtTokenProvider.generateToken(user.getId());
             return Result.success(new LoginResponseDto(jwt, "Bearer", user.getId()));
 
